@@ -29,11 +29,21 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
+# This was the original code before adding zip step. Zip copied from vialeea.
+#      - name: Upload artifact for deployment job
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: node-app
+#          path: .
+
+      - name: Zip artifact for deployment
+        run: zip -r -y release.zip ./*
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,7 +57,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-      
+
+#Added Unzip step from vialeea
+      - name: unzip artifact for deployment
+        run: unzip release.zip
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
