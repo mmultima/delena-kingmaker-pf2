@@ -1,7 +1,19 @@
+
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
 function App() {
+  const [helloContent, setHelloContent] = useState('');
+
+  useEffect(() => {
+    fetch('https://delena-kingmaker-pf2-backend.azurewebsites.net/hello')
+      .then((response) => response.text())
+      .then((data) => setHelloContent(data))
+      .catch((error) => setHelloContent('Error fetching content'));
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +29,9 @@ function App() {
         >
           Learn React
         </a>
+        <div style={{ marginTop: '1em' }}>
+          {helloContent}
+        </div>
       </header>
     </div>
   );
