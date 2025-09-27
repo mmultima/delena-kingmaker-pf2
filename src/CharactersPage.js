@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function CharactersPage() {
-  const charactersEndpoint = 'http://localhost:8080/characters';
+  const baseUrl = process.env.REACT_APP_BACKEND_BASE;
+  const charactersEndpoint = `${baseUrl}/characters`;
+
   const [fetchedCharacters, setFetchedCharacters] = useState([]);
   const [npcCharacters, setNpcCharacters] = useState([]);
   const [pcCharacters, setPcCharacters] = useState([]);
@@ -50,7 +52,9 @@ function CharactersPage() {
       <ul>
         {npcCharacters.map((char) => (
           <li key={char.id}>
-            {char.name} {char.class ? `- ${char.class}` : ''}
+            <Link to={`/character/${char.id}`}>
+              {char.name} {char.class ? `- ${char.class}` : ''}
+            </Link>
           </li>
         ))}
       </ul>
@@ -58,7 +62,9 @@ function CharactersPage() {
       <ul>
         {pcCharacters.map((char) => (
           <li key={char.id}>
-            {char.name} {char.class ? `- ${char.class}` : ''}
+            <Link to={`/character/${char.id}`}>
+              {char.name} {char.class ? `- ${char.class}` : ''}
+            </Link>
           </li>
         ))}
       </ul>
@@ -75,7 +81,11 @@ function CharactersPage() {
         <tbody>
           {pcCharacters.map((pc, pcIdx) => (
             <tr key={pc.id}>
-              <td>{pc.name}</td>
+              <td>
+                <Link to={`/character/${pc.id}`}>
+                  {pc.name}
+                </Link>
+              </td>
               {npcCharacters.map((npc, npcIdx) => (
                 <td key={npc.id}>
                   <input
@@ -99,17 +109,6 @@ function CharactersPage() {
       <Link to="/" style={{ display: 'block', marginTop: '1em' }}>
         Back to Home
       </Link>
-      <h2>Fetched Characters</h2>
-      <ul>
-        {fetchedCharacters.length === 0 && <li>No characters found.</li>}
-        {fetchedCharacters.map((char) => (
-          <li key={char.id}>
-            <Link to={`/character/${char.id}`}>
-              {char.name} {char.class ? `- ${char.class}` : ''}
-            </Link>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

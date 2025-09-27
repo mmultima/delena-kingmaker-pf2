@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 
 // Fetch character from backend using the provided id as a path variable
 const fetchCharacter = async (id) => {
-    const response = await fetch(`http://localhost:8080/character/${id}`);
+    const baseUrl = process.env.REACT_APP_BACKEND_BASE;
+    const response = await fetch(`${baseUrl}/character/${id}`);
     if (!response.ok) throw new Error('Character not found');
     return await response.json();
 };
@@ -16,7 +17,8 @@ const updateCharacter = async (character) => {
 
 // Create character using backend POST endpoint
 const createCharacter = async (character) => {
-    const response = await fetch('http://localhost:8080/character', {
+    const baseUrl = process.env.REACT_APP_BACKEND_BASE;
+    const response = await fetch(`${baseUrl}/character`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(character),

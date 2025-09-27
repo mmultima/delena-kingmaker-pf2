@@ -31,7 +31,8 @@ function Home({ helloContent }) {
 
 function App() {
   const [helloContent, setHelloContent] = useState('');
-  const helloEndpoint = 'http://localhost:8080/hello';
+  const baseUrl = process.env.REACT_APP_BACKEND_BASE;
+  const helloEndpoint = `${baseUrl}/hello`;
 
   useEffect(() => {
     fetch(helloEndpoint)
