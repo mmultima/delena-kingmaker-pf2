@@ -2,26 +2,35 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function CharactersPage() {
-  const npcCharacters = [
-    { name: 'Valerie', class: 'Fighter' },
-    { name: 'Amiri', class: 'Barbarian' },
-    { name: 'Linzi', class: 'Bard' },
-  ];
+  const charactersEndpoint = 'http://localhost:8080/characters';
+  const [fetchedCharacters, setFetchedCharacters] = useState([]);
+  const [npcCharacters, setNpcCharacters] = useState([]);
+  const [pcCharacters, setPcCharacters] = useState([]);
 
-  const pcCharacters = [
-    { name: 'Lady Delena Surtova', class: 'Witch' },
-    { name: 'Meril', class: 'Oracle' },
-    { name: 'Marian', class: 'Wizard' },
-    { name: 'Boromir Keaton', class: 'Fighter' },
-    { name: 'Tavian', class: 'Barbarian' },
-  ];
+  React.useEffect(() => {
+    fetch(charactersEndpoint)
+      .then(res => res.json())
+      .then(data => {
+        setFetchedCharacters(data);
+        setNpcCharacters(data.filter(char => char.npc));
+        setPcCharacters(data.filter(char => !char.npc));
+      })
+      .catch(() => {
+        setFetchedCharacters([]);
+        setNpcCharacters([]);
+        setPcCharacters([]);
+      });
+  }, []);
 
   // Initialize values as a 2D array (PC x NPC)
-  const [values, setValues] = useState(
-    Array(pcCharacters.length)
-      .fill(0)
-      .map(() => Array(npcCharacters.length).fill(0))
-  );
+  const [values, setValues] = useState([]);
+  React.useEffect(() => {
+    setValues(
+      Array(pcCharacters.length)
+        .fill(0)
+        .map(() => Array(npcCharacters.length).fill(0))
+    );
+  }, [pcCharacters.length, npcCharacters.length]);
 
   // Handle cell edit
   const handleChange = (pcIdx, npcIdx, event) => {
@@ -39,17 +48,17 @@ function CharactersPage() {
     <div>
       <h2>NPC Characters</h2>
       <ul>
-        {npcCharacters.map((char, idx) => (
-          <li key={idx}>
-            {char.name} - {char.class}
+        {npcCharacters.map((char) => (
+          <li key={char.id}>
+            {char.name} {char.class ? `- ${char.class}` : ''}
           </li>
         ))}
       </ul>
       <h2>PC Characters</h2>
       <ul>
-        {pcCharacters.map((char, idx) => (
-          <li key={idx}>
-            {char.name} - {char.class}
+        {pcCharacters.map((char) => (
+          <li key={char.id}>
+            {char.name} {char.class ? `- ${char.class}` : ''}
           </li>
         ))}
       </ul>
@@ -58,20 +67,20 @@ function CharactersPage() {
         <thead>
           <tr>
             <th>PC \ NPC</th>
-            {npcCharacters.map((npc, idx) => (
-              <th key={idx}>{npc.name}</th>
+            {npcCharacters.map((npc) => (
+              <th key={npc.id}>{npc.name}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {pcCharacters.map((pc, pcIdx) => (
-            <tr key={pcIdx}>
+            <tr key={pc.id}>
               <td>{pc.name}</td>
               {npcCharacters.map((npc, npcIdx) => (
-                <td key={npcIdx}>
+                <td key={npc.id}>
                   <input
                     type="number"
-                    value={values[pcIdx][npcIdx]}
+                    value={values[pcIdx] ? values[pcIdx][npcIdx] : 0}
                     onChange={e => handleChange(pcIdx, npcIdx, e)}
                     style={{ width: '50px' }}
                   />
@@ -90,6 +99,17 @@ function CharactersPage() {
       <Link to="/" style={{ display: 'block', marginTop: '1em' }}>
         Back to Home
       </Link>
+      <h2>Fetched Characters</h2>
+      <ul>
+        {fetchedCharacters.length === 0 && <li>No characters found.</li>}
+        {fetchedCharacters.map((char) => (
+          <li key={char.id}>
+            <Link to={`/character/${char.id}`}>
+              {char.name} {char.class ? `- ${char.class}` : ''}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

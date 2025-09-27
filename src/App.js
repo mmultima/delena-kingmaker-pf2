@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import CharactersPage from './CharactersPage'; // <-- import the new file
+import Character from './Character'; // <-- import the Character component
 
 function Home({ helloContent }) {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home helloContent={helloContent} />} />
           <Route path="/characters" element={<CharactersPage />} />
+          <Route path="/character/:id" element={<Character />} />
         </Routes>
       </div>
     </Router>
