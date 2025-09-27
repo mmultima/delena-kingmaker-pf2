@@ -5,7 +5,6 @@ function CharactersPage() {
   const baseUrl = process.env.REACT_APP_BACKEND_BASE;
   const charactersEndpoint = `${baseUrl}/characters`;
 
-  const [fetchedCharacters, setFetchedCharacters] = useState([]);
   const [npcCharacters, setNpcCharacters] = useState([]);
   const [pcCharacters, setPcCharacters] = useState([]);
 
@@ -13,16 +12,14 @@ function CharactersPage() {
     fetch(charactersEndpoint)
       .then(res => res.json())
       .then(data => {
-        setFetchedCharacters(data);
         setNpcCharacters(data.filter(char => char.npc));
         setPcCharacters(data.filter(char => !char.npc));
       })
       .catch(() => {
-        setFetchedCharacters([]);
         setNpcCharacters([]);
         setPcCharacters([]);
       });
-  }, []);
+  }, [charactersEndpoint]);
 
   // Initialize values as a 2D array (PC x NPC)
   const [values, setValues] = useState([]);

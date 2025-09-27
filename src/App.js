@@ -39,7 +39,7 @@ function App() {
       .then((response) => response.text())
       .then((data) => setHelloContent(data))
       .catch((error) => setHelloContent('Error fetching content'));
-  }, []);
+  }, [helloEndpoint]);
 
   return (
     <Router>
