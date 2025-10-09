@@ -21,26 +21,24 @@ function CharactersPage() {
       });
   }, [charactersEndpoint]);
 
-  // Initialize values as a 2D array (PC x NPC)
-  const [values, setValues] = useState([]);
-  React.useEffect(() => {
-    setValues(
-      Array(pcCharacters.length)
-        .fill(0)
-        .map(() => Array(npcCharacters.length).fill(0))
-    );
-  }, [pcCharacters.length, npcCharacters.length]);
+  // Calculate the bonus for each PC-NPC pair
+  const getBonus = (pc, npc) => {
+    if (!pc.npcRelationships) return 0;
+    // Sum all bonuses for this NPC
+    return pc.npcRelationships
+      .filter(rel => rel.npcId === npc.id)
+      .reduce((sum, rel) => sum + (rel.bonus || 0), 0);
+  };
 
-  // Handle cell edit
-  const handleChange = (pcIdx, npcIdx, event) => {
-    const newValues = values.map(row => [...row]);
-    newValues[pcIdx][npcIdx] = Number(event.target.value);
-    setValues(newValues);
+  // Get all relationships for a PC-NPC pair
+  const getRelationships = (pc, npc) => {
+    if (!pc.npcRelationships) return [];
+    return pc.npcRelationships.filter(rel => rel.npcId === npc.id);
   };
 
   // Calculate total for each NPC (column sum)
-  const npcTotals = npcCharacters.map((_, npcIdx) =>
-    values.reduce((sum, row) => sum + row[npcIdx], 0)
+  const npcTotals = npcCharacters.map(npc =>
+    pcCharacters.reduce((sum, pc) => sum + getBonus(pc, npc), 0)
   );
 
   return (
@@ -76,23 +74,26 @@ function CharactersPage() {
           </tr>
         </thead>
         <tbody>
-          {pcCharacters.map((pc, pcIdx) => (
+          {pcCharacters.map((pc) => (
             <tr key={pc.id}>
               <td>
                 <Link to={`/character/${pc.id}`}>
                   {pc.name}
                 </Link>
               </td>
-              {npcCharacters.map((npc, npcIdx) => (
-                <td key={npc.id}>
-                  <input
-                    type="number"
-                    value={values[pcIdx] ? values[pcIdx][npcIdx] : 0}
-                    onChange={e => handleChange(pcIdx, npcIdx, e)}
-                    style={{ width: '50px' }}
-                  />
-                </td>
-              ))}
+              {npcCharacters.map((npc) => {
+                const relationships = getRelationships(pc, npc);
+                const tooltip = relationships.length
+                  ? relationships.map(rel =>
+                      `Bonus: ${rel.bonus}, Description: ${rel.description || ''}`
+                    ).join('\n')
+                  : '';
+                return (
+                  <td key={npc.id} title={tooltip}>
+                    {getBonus(pc, npc)}
+                  </td>
+                );
+              })}
             </tr>
           ))}
           <tr>
