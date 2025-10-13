@@ -18,67 +18,19 @@ function Home({ helloContent }) {
 
   return (
     <div
-      style={{
-        minHeight: '100vh',
-        width: '100vw',
-        backgroundImage: `url(${imageUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      className="home-bg"
+      style={{ backgroundImage: `url(${imageUrl})` }}
     >
-      <div style={{
-        background: 'rgba(255,255,255,0.8)',
-        borderRadius: '16px',
-        padding: '2em',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '1em',
-        marginTop: '2em'
-      }}>
+      <div className="home-panel">
         <Link
           to="/characters"
-          style={{
-            display: 'block',
-            width: '120px',
-            height: '120px',
-            borderRadius: '60px',
-            background: '#1976d2',
-            color: '#fff',
-            textAlign: 'center',
-            lineHeight: '120px',
-            fontSize: '1.2em',
-            fontWeight: 'bold',
-            textDecoration: 'none',
-            marginBottom: '1em',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-            transition: 'background 0.2s',
-          }}
+          className="round-btn"
         >
           Characters
         </Link>
         <Link
           to="/loot"
-          style={{
-            display: 'block',
-            width: '120px',
-            height: '120px',
-            borderRadius: '60px',
-            background: '#388e3c',
-            color: '#fff',
-            textAlign: 'center',
-            lineHeight: '120px',
-            fontSize: '1.2em',
-            fontWeight: 'bold',
-            textDecoration: 'none',
-            marginBottom: '1em',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-            transition: 'background 0.2s',
-          }}
+          className="round-btn loot"
         >
           Loot
         </Link>

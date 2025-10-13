@@ -36,3 +36,46 @@
     transform: rotate(360deg);
   }
 }
+
+.home-bg {
+  min-height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-panel {
+  background: rgba(255,255,255,0.8);
+  border-radius: 16px;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  margin-top: 2em;
+}
+
+.round-btn {
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background: #1976d2;
+  color: #fff;
+  text-align: center;
+  line-height: 120px;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-decoration: none;
+  margin-bottom: 1em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: background 0.2s;
+}
+
+.round-btn.loot {
+  background: #388e3c;
+}

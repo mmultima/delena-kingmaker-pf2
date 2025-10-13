@@ -21,6 +21,10 @@ function CharactersPage() {
       });
   }, [charactersEndpoint]);
 
+  // Split PCs into alive and dead
+  const alivePCs = pcCharacters.filter(char => !char.dead);
+  const deadPCs = pcCharacters.filter(char => char.dead);
+
   // Calculate the bonus for each PC-NPC pair
   const getBonus = (pc, npc) => {
     if (!pc.npcRelationships) return 0;
@@ -53,9 +57,19 @@ function CharactersPage() {
           </li>
         ))}
       </ul>
-      <h2>PC Characters</h2>
+      <h2>PC Characters (Alive)</h2>
       <ul>
-        {pcCharacters.map((char) => (
+        {alivePCs.map((char) => (
+          <li key={char.id}>
+            <Link to={`/character/${char.id}`}>
+              {char.name} {char.class ? `- ${char.class}` : ''}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <h2>PC Characters (Dead)</h2>
+      <ul>
+        {deadPCs.map((char) => (
           <li key={char.id}>
             <Link to={`/character/${char.id}`}>
               {char.name} {char.class ? `- ${char.class}` : ''}

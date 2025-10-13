@@ -190,6 +190,16 @@ export default function Character() {
                         />
                     </label>
                     <br />
+                    <label>
+                        Dead:
+                        <input
+                            name="dead"
+                            type="checkbox"
+                            checked={!!form.dead}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <br />
                     <button type="submit">Create</button>
                     <button type="button" onClick={handleCancel} style={{ marginLeft: 8 }}>Cancel</button>
                 </form>
@@ -243,6 +253,16 @@ export default function Character() {
                             name="npc"
                             type="checkbox"
                             checked={!!form.npc}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Dead:
+                        <input
+                            name="dead"
+                            type="checkbox"
+                            checked={!!form.dead}
                             onChange={handleChange}
                         />
                     </label>
