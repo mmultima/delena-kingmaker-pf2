@@ -66,6 +66,15 @@ export default function Character() {
     }, []);
 
     useEffect(() => {
+        // If route is /character/new, open in new character mode
+        if (id === 'new') {
+            setNewMode(true);
+            setEditing(true);
+            setForm({ name: '', image: '', kingmaker: false, npc: false, companion: false, dead: false });
+            setCharacter(null);
+            return;
+        }
+
         if (id && !newMode) {
             fetchCharacter(id).then(data => {
                 setCharacter(data);
@@ -191,6 +200,16 @@ export default function Character() {
                     </label>
                     <br />
                     <label>
+                        Companion:
+                        <input
+                            name="companion"
+                            type="checkbox"
+                            checked={!!form.companion}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <br />
+                    <label>
                         Dead:
                         <input
                             name="dead"
@@ -258,6 +277,16 @@ export default function Character() {
                     </label>
                     <br />
                     <label>
+                        Companion:
+                        <input
+                            name="companion"
+                            type="checkbox"
+                            checked={!!form.companion}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <br />
+                    <label>
                         Dead:
                         <input
                             name="dead"
@@ -320,6 +349,7 @@ export default function Character() {
                     <p><strong>Image:</strong> {character.image}</p>
                     <p><strong>Kingmaker:</strong> {character.kingmaker ? 'Yes' : 'No'}</p>
                     <p><strong>NPC:</strong> {character.npc ? 'Yes' : 'No'}</p>
+                    <p><strong>Companion:</strong> {character.companion ? 'Yes' : 'No'}</p>
                     <h3>NPC Relationships</h3>
                     <ul>
                         {(character.npcRelationships || []).map((rel, idx) => (

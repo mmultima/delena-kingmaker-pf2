@@ -4,6 +4,9 @@ import './App.css';
 import CharactersPage from './CharactersPage';
 import Character from './Character';
 import Loot from './Loot';
+import PartyRelationship from './PartyRelationship';
+import NpcCharacters from './NpcCharacters';
+import Companions from './Companions';
 
 function Home({ helloContent }) {
   const baseUrl = process.env.REACT_APP_BACKEND_BASE;
@@ -22,18 +25,13 @@ function Home({ helloContent }) {
       style={{ backgroundImage: `url(${imageUrl})` }}
     >
       <div className="home-panel">
-        <Link
-          to="/characters"
-          className="round-btn"
-        >
-          Characters
-        </Link>
-        <Link
-          to="/loot"
-          className="round-btn loot"
-        >
-          Loot
-        </Link>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
+          <Link to="/characters" className="round-btn">Characters</Link>
+          <Link to="/loot" className="round-btn loot">Loot</Link>
+          <Link to="/relations" className="round-btn" style={{ background: '#8e44ad' }}>Relations</Link>
+          <Link to="/npccharacters" className="round-btn" style={{ background: '#f39c12' }}>NPCs</Link>
+          <Link to="/companions" className="round-btn" style={{ background: '#2ecc71' }}>Companions</Link>
+        </div>
       </div>
     </div>
   );
@@ -59,6 +57,9 @@ function App() {
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/character/:id" element={<Character />} />
           <Route path="/loot" element={<Loot />} />
+          <Route path="/relations" element={<PartyRelationship />} />
+          <Route path="/npccharacters" element={<NpcCharacters />} />
+          <Route path="/companions" element={<Companions />} />
         </Routes>
       </div>
     </Router>
