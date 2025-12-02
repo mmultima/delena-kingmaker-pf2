@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import CharactersPage from './CharactersPage';
@@ -7,22 +7,30 @@ import Loot from './Loot';
 import PartyRelationship from './PartyRelationship';
 import NpcCharacters from './NpcCharacters';
 import Companions from './Companions';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBackgroundImage, selectBackgroundObjectUrl } from './redux/uiSlice';
 
 function Home({ helloContent }) {
   const baseUrl = process.env.REACT_APP_BACKEND_BASE;
   const imageEndpoint = `${baseUrl}/image`;
   const coverImageUrl = 'https://www.enworld.org/attachments/052620_kingmakercoverart-jpg.122310/';
+  const dispatch = useDispatch();
 
-  const [imageUrl, setImageUrl] = useState('');
+  const imageObjectUrl = useSelector(selectBackgroundObjectUrl);
 
   useEffect(() => {
-    setImageUrl(`${imageEndpoint}/byparam?url=${encodeURIComponent(coverImageUrl)}`);
-  }, [imageEndpoint, coverImageUrl]);
+    // build the fetch URL and load only if not already loaded in store
+    const fetchUrl = `${imageEndpoint}/byparam?url=${encodeURIComponent(coverImageUrl)}`;
+    if (!imageObjectUrl) {
+      dispatch(fetchBackgroundImage(fetchUrl));
+    }
+    // keep empty deps except dispatch and imageObjectUrl so it runs once per app load
+  }, [dispatch, imageObjectUrl, imageEndpoint]);
 
   return (
     <div
       className="home-bg"
-      style={{ backgroundImage: `url(${imageUrl})` }}
+      style={{ backgroundImage: `url(${imageObjectUrl || ''})` }}
     >
       <div className="home-panel">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
@@ -38,7 +46,7 @@ function Home({ helloContent }) {
 }
 
 function App() {
-  const [helloContent, setHelloContent] = useState('');
+  const [helloContent, setHelloContent] = React.useState('');
   const baseUrl = process.env.REACT_APP_BACKEND_BASE;
   const helloEndpoint = `${baseUrl}/hello`;
 
@@ -46,7 +54,7 @@ function App() {
     fetch(helloEndpoint)
       .then((response) => response.text())
       .then((data) => setHelloContent(data))
-      .catch((error) => setHelloContent('Error fetching content'));
+      .catch(() => setHelloContent('Error fetching content'));
   }, [helloEndpoint]);
 
   return (

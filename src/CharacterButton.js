@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function CharacterButton({ character, buttonWidth }) {
+export default function CharacterButton({ character, buttonWidth, guest }) {
   const style = {
     display: 'inline-block',
     width: buttonWidth ? `${buttonWidth}px` : 'auto',
     margin: '0.5em 0',
     padding: '0.75em 1.25em',
     borderRadius: '24px',
-    background: character.dead ? '#aaa' : '#1976d2',
+    background: character.dead ? '#aaa' : (guest ? '#ff8a65' : '#1976d2'),
     color: '#fff',
     textDecoration: 'none',
     fontWeight: 'bold',

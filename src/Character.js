@@ -70,7 +70,7 @@ export default function Character() {
         if (id === 'new') {
             setNewMode(true);
             setEditing(true);
-            setForm({ name: '', image: '', kingmaker: false, npc: false, companion: false, dead: false });
+            setForm({ name: '', image: '', kingmaker: false, npc: false, companion: false, dead: false, guest: false });
             setCharacter(null);
             return;
         }
@@ -117,7 +117,7 @@ export default function Character() {
     };
 
     const handleNew = () => {
-        setForm({ name: '', kingmaker: false, npc: false });
+        setForm({ name: '', image: '', kingmaker: false, npc: false, companion: false, dead: false, guest: false });
         setCharacter(null);
         setNewMode(true);
         setEditing(true);
@@ -210,6 +210,16 @@ export default function Character() {
                     </label>
                     <br />
                     <label>
+                        Guest:
+                        <input
+                            name="guest"
+                            type="checkbox"
+                            checked={!!form.guest}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <br />
+                    <label>
                         Dead:
                         <input
                             name="dead"
@@ -287,6 +297,16 @@ export default function Character() {
                     </label>
                     <br />
                     <label>
+                        Guest:
+                        <input
+                            name="guest"
+                            type="checkbox"
+                            checked={!!form.guest}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <br />
+                    <label>
                         Dead:
                         <input
                             name="dead"
@@ -350,6 +370,7 @@ export default function Character() {
                     <p><strong>Kingmaker:</strong> {character.kingmaker ? 'Yes' : 'No'}</p>
                     <p><strong>NPC:</strong> {character.npc ? 'Yes' : 'No'}</p>
                     <p><strong>Companion:</strong> {character.companion ? 'Yes' : 'No'}</p>
+                    <p><strong>Guest:</strong> {character.guest ? 'Yes' : 'No'}</p>
                     <h3>NPC Relationships</h3>
                     <ul>
                         {(character.npcRelationships || []).map((rel, idx) => (
