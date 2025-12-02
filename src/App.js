@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './redux/StoreConfiguration';
 import './App.css';
 import CharactersPage from './CharactersPage';
 import Character from './Character';
@@ -58,19 +60,21 @@ function App() {
   }, [helloEndpoint]);
 
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Home helloContent={helloContent} />} />
-          <Route path="/characters" element={<CharactersPage />} />
-          <Route path="/character/:id" element={<Character />} />
-          <Route path="/loot" element={<Loot />} />
-          <Route path="/relations" element={<PartyRelationship />} />
-          <Route path="/npccharacters" element={<NpcCharacters />} />
-          <Route path="/companions" element={<Companions />} />
-        </Routes>
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Home helloContent={helloContent} />} />
+            <Route path="/characters" element={<CharactersPage />} />
+            <Route path="/character/:id" element={<Character />} />
+            <Route path="/loot" element={<Loot />} />
+            <Route path="/relations" element={<PartyRelationship />} />
+            <Route path="/npccharacters" element={<NpcCharacters />} />
+            <Route path="/companions" element={<Companions />} />
+          </Routes>
+        </div>
+      </Router>
+    </Provider>
   );
 }
 
