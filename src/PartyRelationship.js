@@ -21,8 +21,8 @@ export default function PartyRelationship() {
   const [pcCharacters, setPcCharacters] = useState([]);
 
   // toggles: include dead and include guests
-  const [includeDead, setIncludeDead] = useState(true);
-  const [includeGuests, setIncludeGuests] = useState(true);
+  const [includeDead, setIncludeDead] = useState(false);
+  const [includeGuests, setIncludeGuests] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -249,49 +249,71 @@ export default function PartyRelationship() {
                     const tooltip = rels.length
                       ? rels
                         .map(r => {
-                        const line = `Bonus: ${r.bonus}${r.description ? ` — ${r.description}` : ''}`;
-                        // replace normal spaces with non-breaking spaces so lines won't wrap on spaces
-                        return line.replace(/ /g, '\u00A0');
+                        const line = `${r.bonus > 0 ? '+' : ''}${r.bonus}${r.description ? ` — ${r.description}` : ''}`;
+                        // allow normal spaces so long lines can wrap to multiple lines
+                        return line;
                         })
                         .join('\n')
                       : 'No relationships';
                     const key = `${pc.id}-${npc.id}`;
 
+                    const isActive = activeTooltip === key;
+
                     return (
                       <div
-                        key={npc.id}
-                        data-tooltip-key={key}
-                        onClick={() => handleToggleTooltip(key)}
-                        style={{
-                          ...numberCellStyle,
-                          position: 'relative',
-                          cursor: tooltip ? 'pointer' : 'default'
-                        }}
-                        // keep native title for hover; click/tap shows our popup
-                        title={tooltip}
+                      key={npc.id}
+                      data-tooltip-key={key}
+                      onClick={() => handleToggleTooltip(key)}
+                      style={{
+                        ...numberCellStyle,
+                        position: 'relative',
+                        cursor: tooltip ? 'pointer' : 'default',
+                        background: isActive ? 'rgba(255,152,0,0.12)' : numberCellStyle.background,
+                        outline: isActive ? '2px solid #ff7043' : 'none',
+                        zIndex: isActive ? 1100 : 'auto',
+                        transition: 'background 120ms ease, outline 120ms ease'
+                      }}
+                      // keep native title for hover; click/tap shows our popup
+                      title={tooltip}
                       >
-                        {getBonus(pc, npc)}
+                      {getBonus(pc, npc)}
 
-                        {activeTooltip === key && (
-                          <div style={{
-                            position: 'absolute',
-                            bottom: 'calc(100% + 6px)',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            background: 'rgba(0,0,0,0.9)',
-                            color: '#fff',
-                            padding: '6px 8px',
-                            borderRadius: 6,
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
-                            fontSize: 12,
-                            whiteSpace: 'pre-wrap',
-                            zIndex: 1200,
-                            maxWidth: 260,
-                            textAlign: 'left'
-                          }}>
-                            {tooltip}
-                          </div>
-                        )}
+                      {activeTooltip === key && (() => {
+                        // compute position: horizontally center in viewport,
+                        // vertically place just below the clicked cell
+                        const cell = (typeof document !== 'undefined') && document.querySelector(`[data-tooltip-key="${key}"]`);
+                        const rect = cell ? cell.getBoundingClientRect() : null;
+                        const offset = 8; // gap between cell and tooltip
+                        const maxBottomMargin = 16; // keep tooltip away from viewport bottom
+                        const topPx = rect
+                        ? Math.min(rect.bottom + offset, window.innerHeight - maxBottomMargin)
+                        : window.innerHeight / 2;
+                        const transform = rect ? 'translateX(-50%)' : 'translate(-50%, -50%)';
+
+                        const popupStyle = {
+                        position: 'fixed',
+                        left: '50%',             // horizontally center
+                        top: `${topPx}px`,      // below clicked object (or center fallback)
+                        transform,              // translateX(-50%) or translate(-50%,-50%) fallback
+                        background: 'rgba(0,0,0,0.9)',
+                        color: '#fff',
+                        padding: '6px 8px',
+                        borderRadius: 6,
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+                        fontSize: 12,
+                        whiteSpace: 'pre-wrap',
+                        zIndex: 1200,
+                        maxWidth: 260,
+                        width: 'min(90vw, 260px)',
+                        textAlign: 'left'
+                        };
+
+                        return (
+                        <div style={popupStyle}>
+                          {tooltip}
+                        </div>
+                        );
+                      })()}
                       </div>
                     );
                   })}
