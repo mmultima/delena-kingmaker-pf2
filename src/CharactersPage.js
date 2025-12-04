@@ -69,13 +69,13 @@ function CharactersPage() {
   }, [pcCharacters]);
 
   const tabBaseStyle = {
-    padding: '10px 20px',
-    borderRadius: 24,
+    padding: '8px 16px',     // slightly less wide
+    borderRadius: 20,
     cursor: 'pointer',
     fontWeight: '700',
     boxShadow: '0 2px 6px rgba(0,0,0,0.12)',
     border: '1px solid transparent',
-    minWidth: 120,
+    minWidth: 96,            // reduced min width
     textAlign: 'center'
   };
 
@@ -102,6 +102,8 @@ function CharactersPage() {
 
   const homeButtonStyle = {
     ...tabBaseStyle,
+    padding: '8px 14px',
+    minWidth: 92,
     background: '#1976d2',
     color: '#fff',
     textDecoration: 'none',
@@ -112,6 +114,8 @@ function CharactersPage() {
 
   const newButtonStyle = {
     ...tabBaseStyle,
+    padding: '8px 14px',
+    minWidth: 92,
     background: '#2e7d32',
     color: '#fff',
     textDecoration: 'none',
@@ -139,13 +143,13 @@ function CharactersPage() {
 
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '16px' }}>
           <button onClick={() => setActiveTab('alive')} style={aliveStyle}>
-            Alive ({alivePCs.length})
+            Alive
           </button>
           <button onClick={() => setActiveTab('guest')} style={guestStyle}>
-            Guests ({guestPCs.length})
+            Guests
           </button>
           <button onClick={() => setActiveTab('dead')} style={deadStyle}>
-            Dead ({deadPCs.length})
+            Dead
           </button>
         </div>
 
